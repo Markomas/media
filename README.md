@@ -10,7 +10,7 @@ Elle permet le streaming et le téléchargement depuis l'interface web.
 
 ## Fonctionnalités :
 
-* Films et Séries :
+### * Films et Séries :
   * Import, Renommage et classement automatique des fichiers:
     * /Année/Titre-Année pour les films
     * /Titre/Saison/Titre-EXXSXX pour les séries
@@ -22,7 +22,7 @@ Elle permet le streaming et le téléchargement depuis l'interface web.
   * Streaming et téléchargement des films et séries
   * Edition manuelle ou semi-automatique des fiches en cas d'erreur
 
-* Musique :
+### * Musique :
   * Import, Renommage et classement automatique des fichiers:
     * /Artiste/album/XX-Titre
   * Récupération des infos par lecture du tag id3
@@ -35,6 +35,6 @@ Elle permet le streaming et le téléchargement depuis l'interface web.
     * Téléchargement des musiques par album ou unitaire
   * Edition manuelle en cas d'erreur
 
-  * Logiciels et Jeux :
-    * Affichage de l'arborescence des dossiers (cakebox like)
-    * Pas d'indexation dans la base de donnée !
+### * Logiciels et Jeux :
+  * Affichage de l'arborescence des dossiers (cakebox like)
+  * Pas d'indexation dans la base de donnée !
