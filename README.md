@@ -84,7 +84,7 @@ Apache doit avoir des droits d'écriture sur ces dossiers.
 
 Afin de configurer la base de donnée de l'application, il suffit d'éditer le fichier
 ```
-/config/app.default.conf
+/config/app.default.php
 ```
 et éditer la section DataSources (lignes 206)
 ```
@@ -95,7 +95,7 @@ et éditer la section DataSources (lignes 206)
 ```
 il est nécessaire de renommer app.default.conf en app.conf
 ```
-mv /config/app.default.conf /config/app.conf
+mv /config/app.default.php /config/app.php
 ```
 
 J'ai fait un dump de la base de donnée minimale à importer dans votre DB, situé dans à la racine dans le fichier :
