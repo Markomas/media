@@ -166,3 +166,12 @@ Il faut aussi complèter l'url de base de votre installation (base)
 Il est aussi nécessaire de fournir votre clé d'api theMovieDataBase (tmdb_api_key) > Il suffit de s'inscrire sur themoviedb.org de créer un compte : Mon compte > API
 
 Tout est maintenant parfaitement configuré pour utiliser l'application.
+
+## Import de la bibliothèque existante :
+
+Que ce soit pour les Films, la Musique ou encore les Séries, le schéma d'import est le même :
+* On dépose les fichiers (avec ou sans sous dossiers) dans le dossier Film_upload, Musique_upload ou Serie_upload (on peut aussi utiliser le formulaire d'upload)
+* On se rend dans Films > Upload / Ajout automatique
+* On clique sur renommer (page peut être lente à charger en cas de grosse importation)
+* On vérifie que les fichiers sont correctements renommés (ou pas ...)
+* On clique sur importer (de même le temps de process peut être long > temps d'accès à l'api)
