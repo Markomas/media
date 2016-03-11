@@ -93,7 +93,7 @@ et éditer la section DataSources (lignes 206)
 'password' => 'secret',
 'database' => 'my_app',
 ```
-il est nécessaire de renommer app.default.conf en app.conf
+il est nécessaire de renommer app.default.php en app.php
 ```
 mv /config/app.default.php /config/app.php
 ```
