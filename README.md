@@ -145,19 +145,24 @@ On redémarre apache (ou reload)
 sudo service apache2 reload
 ```
 
-#### Aplication :
+#### Application :
 
 Votre app est maintenant en route, vous pouvez dès à présent vous connecter à l'addresse qui correspond à votre config apache.
 
 Les identifiants par défaut sont : admin / admin
 
 Nous allons maintenant configurer les dossiers :
+
 Pour celà, il faut se loguer aller dans Administration > Configuration > Dossiers
 Pour chaque dossier, éditez le chemin en fonction de l'emplacement où vous avez créé le dossier.
 
 Une fois celà effectué nous pouvons configurer les url : Administration > Configuration > URL
+
 Celà correspond aux alias que vous avez créés sous apache.
+
+
 Il faut aussi complèter l'url de base de votre installation (base)
+
 Il est aussi nécessaire de fournir votre clé d'api theMovieDataBase (tmdb_api_key) > Il suffit de s'inscrire sur themoviedb.org de créer un compte : Mon compte > API
 
 Tout est maintenant parfaitement configuré pour utiliser l'application.
