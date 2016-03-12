@@ -481,7 +481,7 @@ class SeriesController extends AppController
           // On utilise le résultat précédent, comme les épisode sont scannés à la suite, cela limite les accès à l'api externe
           // Pour cela on compare le nom des séries
           $this->loadModel('Config');
-          $apikey = $this->Config->findByNom('tmdb_api_key')->first();
+          $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
 
           if ($name == $name_old) {
 
@@ -588,7 +588,7 @@ class SeriesController extends AppController
     {
       $this->loadModel('Config');
 
-      $apikey = $this->Config->findByNom('tmdb_api_key')->first();
+      $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
       $tmdb = new TMDB($apikey, 'fr');
       $tmdb_en = new TMDB($apikey, 'en');
 
@@ -723,7 +723,7 @@ class SeriesController extends AppController
 
         $this->loadModel('Config');
 
-        $apikey = $this->Config->findByNom('tmdb_api_key')->first();
+        $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
         $tmdb = new TMDB($apikey, 'fr');
 
         // on récupère les variables issues des autres controleurs

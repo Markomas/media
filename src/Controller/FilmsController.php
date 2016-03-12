@@ -405,7 +405,7 @@ $films = $this->Films->find('all',array(
      {
        $this->loadModel('Config');
 
-       $apikey = $this->Config->findByNom('tmdb_api_key')->first();
+       $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
 
        $tmdb = new TMDB($apikey, 'fr');
        $film = $this->Films->newEntity();
@@ -663,7 +663,7 @@ $films = $this->Films->find('all',array(
 
           // on recup' l'api !
           $this->loadModel('Config');
-          $apikey = $this->Config->findByNom('tmdb_api_key')->first();
+          $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
 
           $film_info = getFilm($name, $year, $film_path, $path, $apikey);
 
@@ -785,7 +785,7 @@ $films = $this->Films->find('all',array(
         $this->loadModel('Rmwords');
         $this->loadModel('Config');
 
-        $apikey = $this->Config->findByNom('tmdb_api_key')->first();
+        $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
         $tmdb = new TMDB($apikey, 'fr');
 
         // on récupère les variables issues des autres controleurs
@@ -882,7 +882,7 @@ $films = $this->Films->find('all',array(
     {
       $this->loadModel('Config');
 
-      $apikey = $this->Config->findByNom('tmdb_api_key')->first();
+      $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
       $tmdb = new TMDB($apikey, 'fr');
       $film = $this->Films->newEntity();
       $file =  str_replace('-slash-', '/', $file);
