@@ -36,6 +36,18 @@
 !/app/logs/empty
 
 /webroot/img/*
+!/webroot/img/
+!/webroot/img/empty
+
+/webroot/img/poster/*
+!/webroot/img/poster/
+!/webroot/img/poster/empty
+
+/webroot/img/album/*
+!/webroot/img/album/
+!/webroot/img/album/empty
+
+
 /webroot/film_upload/*
 /webroot/film_user/*
 /webroot/serie_upload/*
