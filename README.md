@@ -95,7 +95,7 @@ et éditer la section DataSources (lignes 206)
 ```
 il est nécessaire de renommer app.default.php en app.php
 ```
-mv /config/app.default.php /config/app.php
+mv config/app.default.php config/app.php
 ```
 
 J'ai fait un dump de la base de donnée minimale à importer dans votre DB, situé dans à la racine dans le fichier :
@@ -131,13 +131,18 @@ De cette manière là vous pourrez télécharger/streamer les fichiers
 
 Après la conf apache est classique pour un site web, on follow les symlinks, ...
 ```
-DocumentRoot /var/www/media
+<VirtualHost *:80>
 
-<Directory /var/www/media>
-    Options FollowSymLinks
-    AllowOverride All
-</Directory>
+        ServerName 127.0.0.1
 
+        DocumentRoot /var/www/media
+
+        <Directory /var/www/media>
+            Options FollowSymLinks
+            AllowOverride All
+        </Directory>
+
+</VirtualHost>
 ```
 
 On redémarre apache (ou reload)
