@@ -229,7 +229,7 @@ function getDef($videofile){
     return $HD;
 }
 
-function getFilm ($search, $year, $file, $path, $apikey)
+function getFilm ($search, $year, $file, $path, $apikey, $symlink)
 {
 
   require_once ("tmdb-api.php");
@@ -282,6 +282,12 @@ function getFilm ($search, $year, $file, $path, $apikey)
   $lang = getLang($path.'/'.$file);
   $sub = getSub($path.'/'.$file);
 
+  if ($symlink == 'true') {
+    $original_file = readlink($path.'/'.$file);
+  } else {
+    $original_file = $path.'/'.$file;
+  }
+
   $array = array(
     'tmdb' => $id,
     'titre_film' => $titre,
@@ -298,7 +304,8 @@ function getFilm ($search, $year, $file, $path, $apikey)
     'date_ajout' => '',
     'def_film' => $def,
     'audio' => $lang,
-    'sub' => $sub);
+    'sub' => $sub,
+    'original_file' => $original_file);
 
     return $array;
 
@@ -306,7 +313,7 @@ function getFilm ($search, $year, $file, $path, $apikey)
 
 }
 
-function getEpisodeInfo($old_info, $season, $episode, $file, $path, $apikey)
+function getEpisodeInfo($old_info, $season, $episode, $file, $path, $apikey, $symlink)
 {
   require_once ("tmdb-api.php");
 
@@ -321,6 +328,12 @@ function getEpisodeInfo($old_info, $season, $episode, $file, $path, $apikey)
   $def = getDef($path.'/'.$file);
   $lang = getLang($path.'/'.$file);
   $sub = getSub($path.'/'.$file);
+
+  if ($symlink == 'true') {
+    $original_file = readlink($path.'/'.$file);
+  } else {
+    $original_file = $path.'/'.$file;
+  }
 
   $array = array(
     'id_tmdb' => $old_info['id_tmdb'],
@@ -338,12 +351,13 @@ function getEpisodeInfo($old_info, $season, $episode, $file, $path, $apikey)
     'titre_episode' => $titre_episode,
     'def' => $def,
     'audio' => $lang,
-    'sub' => $sub);
+    'sub' => $sub,
+    'orignal_file' => $orignal_file);
 
     return $array;
 }
 
-function getSerie ($search, $season, $episode, $file, $path, $apikey)
+function getSerie ($search, $season, $episode, $file, $path, $apikey, $symlink)
 {
 
   require_once ("tmdb-api.php");
@@ -395,6 +409,12 @@ function getSerie ($search, $season, $episode, $file, $path, $apikey)
   $lang = getLang($path.'/'.$file);
   $sub = getSub($path.'/'.$file);
 
+  if ($symlink == 'true') {
+    $original_file = readlink($path.'/'.$file);
+  } else {
+    $original_file = $path.'/'.$file;
+  }
+
 
   $array = array(
     'id_tmdb' => $id_tmdb,
@@ -412,7 +432,8 @@ function getSerie ($search, $season, $episode, $file, $path, $apikey)
     'titre_episode' => $titre_episode,
     'def' => $def,
     'audio' => $lang,
-    'sub' => $sub);
+    'sub' => $sub,
+    'original_file' => $original_file);
 
     return $array;
 

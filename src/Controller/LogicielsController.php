@@ -40,10 +40,10 @@ class LogicielsController extends AppController
 
         $soft_original = $dir->read(true);
         $soft_original = str_replace($path.'/', '', $soft_original);
-        
 
-        $this->loadModel('Config');
-        $url_soft = $this->Config->findByNom('url_logiciels')->first()['valeur'];
+
+        $this->loadModel('Urls');
+        $url_soft = $this->Urls->findByNom('url_logiciels')->first()['valeur'];
         array_unshift($dossier, $url_soft);
         $this->set('dossier', $dossier);
         $this->set('refer', $this->referer());

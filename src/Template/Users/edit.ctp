@@ -11,7 +11,7 @@
         if ($authUser['role']=='admin'){?>
           <?=
           $this->Form->input('role', [
-              'options' => ['admin' => 'Admin', 'author' => 'Author']
+              'options' => ['admin' => 'Admin', 'viewer' => 'Invité']
           ]);?><?php
         }else {?><?=
           $this->Form->input('role',  ['disabled' => 'disabled']);

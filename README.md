@@ -10,6 +10,13 @@ Elle permet le streaming et le téléchargement depuis l'interface web.
 
 ## Fonctionnalités :
 
+#### Nouveautées de la version 2.1 :
+  * Mise en place d'un installeur qui facilite la migration et l'installation.
+  * Mise en place d'une méthode de traitement des fichiers par symlink.
+  * Gestion des utilisateurs et possibilité de passer le site en privé.
+  * Possibilité de supprimer le bouton upload et les sections inutilisées.
+  * Amélioration du processus de modération.
+
 #### Films et Séries :
   * Import, Renommage et classement automatique des fichiers:
     * /Année/Titre-Année pour les films
@@ -52,6 +59,13 @@ L'application nécessite cependant quelques dépendances, ffmpeg pour les infos 
 ```
 sudo apt-get install ffmpeg
 ```
+Je pars du  principe, que vous avez un serveur web complet (apache ou nginx, mysql, php5.5 minimum)
+
+CakePHP nécessite l'installation de php5-intl et php5-curl:
+```
+sudo apt-get install php5-intl php5-curl
+
+```
 
 CakePHP nécessite l'activation du module rewrite d'apache :
 ```
@@ -80,30 +94,8 @@ Liste des dossiers à créer:
 
 Apache doit avoir des droits d'écriture sur ces dossiers.
 
-#### Base de donnée:
 
-Afin de configurer la base de donnée de l'application, il suffit d'éditer le fichier
-```
-/config/app.default.php
-```
-et éditer la section DataSources (lignes 206)
-```
-'host' => 'localhost',
-'username' => 'my_app',
-'password' => 'secret',
-'database' => 'my_app',
-```
-il est nécessaire de renommer app.default.php en app.php
-```
-mv config/app.default.php config/app.php
-```
-
-J'ai fait un dump de la base de donnée minimale à importer dans votre DB, situé dans à la racine dans le fichier :
-```
-media_export.sql
-```
-
-#### Apache :
+#### Serveur web :
 Il est nécessaire de correctement configurer  tous les dossiers dans lequels vos fichiers sont présents.
 Pour celà, il faut générer un alias pour chacun des dossiers suivants !
 
@@ -117,7 +109,10 @@ Si vous regardez dans la db importé, j'ai utilisé les alias suivants.
 * Jeux : /access/jeux
 * Logiciels	: /access/logiciels
 
+
+##### Apache :
 Pour chacun des dossier cité ci-dessus vous devez créer un alias :
+
 ```
 Alias /access/films /var/www/films/
 <Directory "/var/www/films">
@@ -150,27 +145,60 @@ On redémarre apache (ou reload)
 sudo service apache2 reload
 ```
 
+##### Nginx :
+Pour chacun des dossier cité ci-dessus vous devez créer un alias :
+
+```
+location /home/library/Jeux {
+    alias /access/jeux;
+    allow all;
+    satisfy any;
+    add_header Content-Disposition "attachment";
+}
+```
+De cette manière là vous pourrez télécharger/streamer les fichiers
+
+Après la conf nginx est classique pour un site web, on follow les symlinks, ...
+```
+server {
+    listen   80;
+    server_name mediaNDD.com;
+    rewrite 301 http://mediaNDD.com$request_uri permanent;
+
+    # root directive should be global
+    root   /usr/share/nginx/media/webroot;
+    index  index.php;
+
+    access_log /var/log/nginx/mediaaccess.log;
+    error_log /var/log/nginx/mediaerror.log;
+
+    location / {
+        try_files $uri /index.php?$args;
+   }
+
+   location ~ \.php$ {
+    try_files $uri =404;
+    include /etc/nginx/fastcgi_params;
+    fastcgi_pass    unix:/var/run/php5-fpm.sock;
+    fastcgi_index   index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+  }
+
+}
+```
+
+On redémarre apache (ou reload)
+```
+sudo service apache2 reload
+```
+
 #### Application :
 
-Votre app est maintenant en route, vous pouvez dès à présent vous connecter à l'addresse qui correspond à votre config apache.
-
-Les identifiants par défaut sont : admin / admin
-
-Nous allons maintenant configurer les dossiers :
-
-Pour celà, il faut se loguer aller dans Administration > Configuration > Dossiers
-Pour chaque dossier, éditez le chemin en fonction de l'emplacement où vous avez créé le dossier.
-
-Une fois celà effectué nous pouvons configurer les url : Administration > Configuration > URL
-
-Celà correspond aux alias que vous avez créés sous apache.
+Votre app est maintenant en route, vous pouvez dès à présent vous connecter à l'addresse qui correspond à votre config Apache /Nginx afin de commencer à configurer votre installation. Laissez-vous guider !
 
 
-Il faut aussi complèter l'url de base de votre installation (base)
+Il est nécessaire de fournir votre clé d'api theMovieDataBase (tmdb_api_key) > Il suffit de s'inscrire sur themoviedb.org de créer un compte : Mon compte > API
 
-Il est aussi nécessaire de fournir votre clé d'api theMovieDataBase (tmdb_api_key) > Il suffit de s'inscrire sur themoviedb.org de créer un compte : Mon compte > API
-
-Tout est maintenant parfaitement configuré pour utiliser l'application.
 
 ## Import de la bibliothèque existante :
 

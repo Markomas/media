@@ -41,8 +41,8 @@ class JeuxController extends AppController
         $jeux_original = $dir->read(true);
         $jeux_original = str_replace($path.'/', '', $jeux_original);
 
-        $this->loadModel('Config');
-        $url_jeux = $this->Config->findByNom('url_jeux')->first()['valeur'];
+        $this->loadModel('Urls');
+        $url_jeux = $this->Urls->findByNom('url_jeux')->first()['valeur'];
         array_unshift($dossier, $url_jeux);
         $this->set('dossier', $dossier);
         $this->set('refer', $this->referer());

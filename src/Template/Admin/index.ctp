@@ -5,7 +5,7 @@
 
   <div class="pull-right">
     <br>
-    Tu es perdu .onscrit ? <span class="glyphicon glyphicon-arrow-right"></span> <a href="admin_help.php" class="btn btn-info"><span class="glyphicon glyphicon-question-sign"></span>&nbsp;Aide</a>
+    Tu es perdu ? <span class="glyphicon glyphicon-arrow-right"></span> <a href="admin_help.php" class="btn btn-info"><span class="glyphicon glyphicon-question-sign"></span>&nbsp;Aide</a>
   </div>
   <br>
   <br>

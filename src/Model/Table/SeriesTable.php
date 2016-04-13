@@ -85,8 +85,12 @@ class SeriesTable extends Table
         $validator
             ->requirePresence('file', 'create')
             ->notEmpty('file');
+            
+        $validator
+            ->requirePresence('original_file', 'create')
+            ->notEmpty('original_file');
 
-    
+
 
         return $validator;
     }

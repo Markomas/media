@@ -1,0 +1,34 @@
+2016-04-13 20:39:57 Warning: Warning (2): Invalid argument supplied for foreach() in [/var/www/media-test/src/Template/Layout/default.ctp, line 60]
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 138
+include - APP/Template/Layout/default.ctp, line 60
+Cake\View\View::_evaluate() - CORE/src/View/View.php, line 971
+Cake\View\View::_render() - CORE/src/View/View.php, line 931
+Cake\View\View::renderLayout() - CORE/src/View/View.php, line 625
+Cake\View\View::render() - CORE/src/View/View.php, line 584
+Cake\Controller\Controller::render() - CORE/src/Controller/Controller.php, line 611
+Cake\Error\ExceptionRenderer::_outputMessage() - CORE/src/Error/ExceptionRenderer.php, line 304
+Cake\Error\ExceptionRenderer::render() - CORE/src/Error/ExceptionRenderer.php, line 180
+Cake\Error\ErrorHandler::_displayException() - CORE/src/Error/ErrorHandler.php, line 144
+Cake\Error\BaseErrorHandler::handleException() - CORE/src/Error/BaseErrorHandler.php, line 155
+[main] - [internal], line ??
+
+
+
+2016-04-13 20:39:57 Error: [PDOException] SQLSTATE[28000] [1045] Access denied for user 'my_app'@'localhost' (using password: YES)
+Request URL: /media-test/install/dbcreate
+Stack Trace:
+#0 /var/www/media-test/vendor/cakephp/cakephp/src/Database/Driver/PDODriverTrait.php(48): PDO->__construct('mysql:host=loca...', 'my_app', 'secret', Array)
+#1 /var/www/media-test/vendor/cakephp/cakephp/src/Database/Driver/Mysql.php(90): Cake\Database\Driver\Mysql->_connect('mysql:host=loca...', Array)
+#2 /var/www/media-test/vendor/cakephp/cakephp/src/Database/Driver/Mysql.php(119): Cake\Database\Driver\Mysql->connect()
+#3 /var/www/media-test/vendor/cakephp/cakephp/src/Database/Connection.php(216): Cake\Database\Driver\Mysql->prepare('CREATE TABLE IF...')
+#4 /var/www/media-test/vendor/cakephp/cakephp/src/Database/Connection.php(283): Cake\Database\Connection->prepare('CREATE TABLE IF...')
+#5 /var/www/media-test/src/Controller/InstallController.php(178): Cake\Database\Connection->query('CREATE TABLE IF...')
+#6 [internal function]: App\Controller\InstallController->dbcreate()
+#7 /var/www/media-test/vendor/cakephp/cakephp/src/Controller/Controller.php(429): call_user_func_array(Array, Array)
+#8 /var/www/media-test/vendor/cakephp/cakephp/src/Routing/Dispatcher.php(114): Cake\Controller\Controller->invokeAction()
+#9 /var/www/media-test/vendor/cakephp/cakephp/src/Routing/Dispatcher.php(87): Cake\Routing\Dispatcher->_invoke(Object(App\Controller\InstallController))
+#10 /var/www/media-test/webroot/index.php(44): Cake\Routing\Dispatcher->dispatch(Object(Cake\Network\Request), Object(Cake\Network\Response))
+#11 {main}
+
+

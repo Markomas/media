@@ -68,6 +68,10 @@ class MusicTable extends Table
             ->requirePresence('file', 'create');
 
         $validator
+            ->requirePresence('original_file', 'create')
+            ->notEmpty('original_file');
+
+        $validator
             ->requirePresence('genre', 'create');
 
         $validator

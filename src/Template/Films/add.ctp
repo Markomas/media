@@ -23,6 +23,7 @@
             echo $this->Form->input('note_film');
             echo $this->Form->input('tagline_film');
             echo $this->Form->input('file_film');
+            echo $this->Form->input('original_file');
             echo $this->Form->input('date_ajout');
             echo $this->Form->input('view');
             echo $this->Form->input('alert');

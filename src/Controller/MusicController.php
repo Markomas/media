@@ -153,11 +153,11 @@ public function indexArtist()
       $this->redirect(['action' => 'search', '?' => ['search' => $search, 'year'=>$year]]);
     }
 
-    $this->loadModel('Config');
+    $this->loadModel('Urls');
     $this->loadModel('Folders');
 
     // on récupère les variables issues des autres controleurs
-    $url = $this->Config->findByNom('url_music')->first()['valeur'];
+    $url = $this->Urls->findByNom('url_music')->first()['valeur'];
     $path = $this->Folders->findByType('Musique')->first()['path'];
 
     $this->viewBuilder()->layout('music_album');
@@ -201,11 +201,11 @@ public function indexArtist()
       $search = $this->request->query('search');
       $this->redirect(['action' => 'search', '?' => ['search' => $search, 'year'=>$year]]);
     }
-    $this->loadModel('Config');
+    $this->loadModel('Urls');
     $this->loadModel('Folders');
 
     // on récupère les variables issues des autres controleurs
-    $url = $this->Config->findByNom('url_music')->first()['valeur'];
+    $url = $this->Urls->findByNom('url_music')->first()['valeur'];
     $path = $this->Folders->findByType('Musique')->first()['path'];
 
     $this->viewBuilder()->layout('music_index');
@@ -406,9 +406,11 @@ public function upload()
 public function rename(){
 
     $this->loadModel('Folders');
+    $this->loadModel('Config');
 
     // on récupère les variables issues des autres controleurs
     $settings = $this->Folders->findByType('Musique')->first();
+    $symlink = $this->Config->findByNom('symlink')->first()['valeur'];
 
     $filetype = $settings['filetype'];
 
@@ -468,14 +470,22 @@ public function rename(){
         array_push($musics_move, $move);
         // On créé le fichier avant > permet de créer les dossiers 20XX
         $file_move = new File ($move, true, 0777);
-        // on move ! avec rename !
-        if(rename($music_path, $move)){
-          array_push($musics_ok, 'OK');
-          //chmod($move, 0777);
-        }else {
-          array_push($musics_ok, 'Erreur');
-        }
 
+        if ($symlink == 'true') {
+          unlink($move);
+
+          symlink($music_path, $move)
+          array_push($musics_ok, 'OK');
+
+        } else {
+          // on move ! avec rename !
+          if(rename($music_path, $move)){
+            array_push($musics_ok, 'OK');
+            //chmod($move, 0777);
+          }else {
+            array_push($musics_ok, 'Erreur');
+          }
+        }
       }
 
     }

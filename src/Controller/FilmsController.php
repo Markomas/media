@@ -228,7 +228,7 @@ $films = $this->Films->find('all',array(
         $this->set('annees', $years);
 
       }
-//Renommage auto des fichiers et classement !
+//Renommage manuel des fichiers et classement !
       public function renameFile($file='')
       {
         $file = str_replace('-dot-', '.', $file);
@@ -295,10 +295,10 @@ $films = $this->Films->find('all',array(
 // Download du fichier
     public function download($id = null)
     {
-      $this->loadModel('Config');
+      $this->loadModel('Urls');
 
       // on récupère les variables issues des autres controleurs
-      $settings = $this->Config->findByNom('url_film')->first();
+      $settings = $this->Urls->findByNom('url_film')->first();
 
       if ($settings) {
           $path = $settings['valeur'];
@@ -320,10 +320,10 @@ $films = $this->Films->find('all',array(
 // Génération du fichier m3u contenant le lien de stream
     public function stream($id = null)
     {
-      $this->loadModel('Config');
+      $this->loadModel('Urls');
 
       // on récupère les variables issues des autres controleurs
-      $settings = $this->Config->findByNom('url_film')->first();
+      $settings = $this->Urls->findByNom('url_film')->first();
 
       if ($settings) {
           $path = $settings['valeur'];
@@ -354,10 +354,10 @@ $films = $this->Films->find('all',array(
 // Permet de générer le stream pour faciliter la modération des fichiers uploadés.
     public function moderateStream($file, $titre)
     {
-      $this->loadModel('Config');
+      $this->loadModel('Urls');
 
       // on récupère les variables issues des autres controleurs
-      $settings = $this->Config->findByNom('url_film_mod')->first();
+      $settings = $this->Urls->findByNom('url_film_mod')->first();
 
       if ($settings) {
           $path = $settings['valeur'];
@@ -474,7 +474,8 @@ $films = $this->Films->find('all',array(
             'date_ajout' => '',
             'def_film' => $def,
             'audio' => $lang,
-            'sub' => $sub);
+            'sub' => $sub,
+            'original_file' => $file);
 
             $film_add = $this->Films->newEntity($array, ['validate' => false]);
             if ($this->Films->save($film_add)) {
@@ -622,10 +623,14 @@ $films = $this->Films->find('all',array(
 
       $this->loadModel('Folders');
       $this->loadModel('Rmwords');
+      $this->loadModel('Config');
 
 
       // on récupère les variables issues des autres controleurs
       $settings = $this->Folders->findByType('Films')->first();
+      $symlink = $this->Config->findByNom('symlink')->first()['valeur'];
+
+
       $rm_start = explode(',', $this->Rmwords->findByEnd('0')->first()['words']);
       $rm_end = explode(',', $this->Rmwords->findByEnd('1')->first()['words']);
       $filetype = $settings['filetype'];
@@ -648,14 +653,17 @@ $films = $this->Films->find('all',array(
       $films_ok = array();
 
       foreach ($films_original as $film) {
+        if ($symlink == 'true') {
+          $full_path = readlink($film);
+        } else {
+          $full_path = $film;
+        }
         $film = str_replace($path.'/', '', $film);
         $film_path = $film;
         $year = findYear($film);
         $name = rm_words($film, $rm_end, $rm_start);
 
-
-
-        if($this->Films->findByFileFilm($film_path)->first()['file_film']!=$film_path){
+        if($this->Films->findByFileFilm($film_path)->first()['file_film']!=$film_path || $this->Films->findByOriginalFile($full_path)->first()['original_file']!=$full_path){
           // on push les data dans les tableaux
           array_push($films_path, $film_path);
           array_push($films_name, $name);
@@ -665,7 +673,8 @@ $films = $this->Films->find('all',array(
           $this->loadModel('Config');
           $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
 
-          $film_info = getFilm($name, $year, $film_path, $path, $apikey);
+          $film_info = getFilm($name, $year, $film_path, $path, $apikey, $symlink);
+
 
           if (is_array($film_info)){
             $film_add = $this->Films->newEntity($film_info, ['validate' => false]);
@@ -699,9 +708,13 @@ $films = $this->Films->find('all',array(
 
         $this->loadModel('Folders');
         $this->loadModel('Rmwords');
+        $this->loadModel('Config');
+
 
         // on récupère les variables issues des autres controleurs
         $settings = $this->Folders->findByType('Films')->first();
+        $symlink = $this->Config->findByNom('symlink')->first()['valeur'];
+
         $rm_start = explode(',', $this->Rmwords->findByEnd('0')->first()['words']);
         $rm_end = explode(',', $this->Rmwords->findByEnd('1')->first()['words']);
         $filetype = $settings['filetype'];
@@ -734,6 +747,7 @@ $films = $this->Films->find('all',array(
         $films_path = array();
         $films_ok = array();
 
+
         foreach ($films_original as $film) {
           $film_path = $film;
           $film = str_replace($path2.'/', '', $film);
@@ -753,13 +767,25 @@ $films = $this->Films->find('all',array(
             array_push($films_move, $move);
             // On créé le fichier avant > permet de créer les dossiers 20XX
             $file_move = new File ($move, true, 0777);
-            // on move ! avec rename !
-            if(rename($film_path, $move)){
+
+            if ($symlink == 'true') {
+              // on delete le fichier !
+              unlink($move);
+              // on fabrique le symlink
+              symlink($film_path, $move);
               array_push($films_ok, 'OK');
-              //chmod($move, 0777);
-            }else {
-              array_push($films_ok, 'Erreur');
+
+            } else {
+              // on move ! avec rename !
+              if(rename($film_path, $move)){
+                array_push($films_ok, 'OK');
+                //chmod($move, 0777);
+              }else {
+                array_push($films_ok, 'Erreur');
+              }
             }
+
+
 
           }
 

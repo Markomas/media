@@ -24,6 +24,13 @@ if (php_sapi_name() === 'cli-server') {
         return false;
     }
 }
+
+$handle = @fopen(dirname(__DIR__) . '/config/app.php', "r");
+if ($handle == false) {
+  copy(dirname(__DIR__) . '/config/app.default.php', dirname(__DIR__) . '/config/app.php');
+}
+
+
 require dirname(__DIR__) . '/config/bootstrap.php';
 
 use Cake\Network\Request;

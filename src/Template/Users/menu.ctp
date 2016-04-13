@@ -16,7 +16,8 @@ if ($authUser['role']=='admin'){
       <li>'. $this->Html->link(__('Utilisateurs'), ['controller' => 'Users','action' => 'index']).'</li>
     <li>'.  $this->Html->link(__('Dossiers'), ['controller' => 'Folders','action' => 'index']).'</li>
       <li>'. $this->Html->link(__('Traitement'), ['controller' => 'Rmwords','action' => 'index']).'</li>
-      <li>'. $this->Html->link(__('URL'), ['controller' => 'Config','action' => 'index']).'</li>
+      <li>'. $this->Html->link(__('URL'), ['controller' => 'Urls','action' => 'index']).'</li>
+      <li>'. $this->Html->link(__('Paramètres'), ['controller' => 'Config','action' => 'index']).'</li>
 
     </ul>
     <br>

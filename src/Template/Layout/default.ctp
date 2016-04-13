@@ -57,16 +57,29 @@
         </div>
 <div class="collapse navbar-collapse" id="myNavbar">
   <ul class="nav navbar-nav">
-      <li><?= $this->Html->link(__('Films'), ['controller' => 'Films', 'action' => 'indexUser']) ?></li>
-      <li><?= $this->Html->link(__('Séries'), ['controller' => 'Series', 'action' => 'indexUser']) ?></li>
-      <li><?= $this->Html->link(__('Musique'), ['controller' => 'Music', 'action' => 'indexUser']) ?></li>
-      <li><?= $this->Html->link(__('Jeux'), ['controller' => 'Jeux', 'action' => 'indexUser']) ?></li>
-      <li><?= $this->Html->link(__('Logiciels'), ['controller' => 'Logiciels', 'action' => 'indexUser']) ?></li>
+    <?php foreach ($menu as $item): ?>
+      <?php if ($item == 'Films'): ?>
+        <li><?= $this->Html->link(__('Films'), ['controller' => 'Films', 'action' => 'indexUser']) ?></li>
+      <?php endif; ?>
+      <?php if ($item == 'Séries'): ?>
+        <li><?= $this->Html->link(__('Séries'), ['controller' => 'Series', 'action' => 'indexUser']) ?></li>
+      <?php endif; ?>
+      <?php if ($item == 'Musique'): ?>
+        <li><?= $this->Html->link(__('Musique'), ['controller' => 'Music', 'action' => 'indexUser']) ?></li>
+      <?php endif; ?>
+      <?php if ($item == 'Jeux'): ?>
+        <li><?= $this->Html->link(__('Jeux'), ['controller' => 'Jeux', 'action' => 'indexUser']) ?></li>
+      <?php endif; ?>
+      <?php if ($item == 'Logiciels'): ?>
+        <li><?= $this->Html->link(__('Logiciels'), ['controller' => 'Logiciels', 'action' => 'indexUser']) ?></li>
+      <?php endif; ?>
+      <?php endforeach; ?>
 
   </ul>
   <?php
   $authUser = $this->request->Session()->read('Auth.User');
   if ($authUser['role']=='admin'){
+
     echo '
 
         <ul class="nav navbar-nav">
@@ -79,13 +92,22 @@
 
         <div class="input-group nav navbar-nav" >
 
-        '.$this->Html->link(__('Films'), ['controller' => 'Films', 'action' => 'indexAdmin'], array('class' => 'btn btn-success', 'style' => 'margin-top: 10px; padding:5px 10px;')).'
-        &nbsp;</div>
+        ';
+        if (preg_match('#Films#', implode(',', $menu))!=false) {
+          echo $this->Html->link(__('Films'), ['controller' => 'Films', 'action' => 'indexAdmin'], array('class' => 'btn btn-success', 'style' => 'margin-top: 10px; padding:5px 10px;'));
+        }
+        echo '&nbsp;</div>
         <div class="input-group nav navbar-nav">
 
-        '.$this->Html->link(__('Série'), ['controller' => 'Series', 'action' => 'indexAdmin'], array('class' => 'btn  btn-success', 'style' => 'margin-top: 10px; padding:5px 10px;')).'
-        &nbsp;'.$this->Html->link(__('Musique'), ['controller' => 'Music', 'action' => 'indexAdmin'], array('class' => 'btn  btn-success', 'style' => 'margin-top: 10px; padding:5px 10px;')).'
-        &nbsp;'.$this->Html->link(__('Administration'), ['controller' => 'Admin', 'action' => 'index'], array('class' => 'btn  btn-success', 'style' => 'margin-top: 10px; padding:5px 10px;')).'
+        ';
+        if (preg_match('#Séries#', implode(',', $menu))!=false) {
+        echo $this->Html->link(__('Série'), ['controller' => 'Series', 'action' => 'indexAdmin'], array('class' => 'btn  btn-success', 'style' => 'margin-top: 10px; padding:5px 10px;'));
+        }
+        echo '&nbsp;';
+        if (preg_match('#Musique#', implode(',', $menu))!=false) {
+          echo $this->Html->link(__('Musique'), ['controller' => 'Music', 'action' => 'indexAdmin'], array('class' => 'btn  btn-success', 'style' => 'margin-top: 10px; padding:5px 10px;'));
+        }
+        echo '&nbsp;'.$this->Html->link(__('Administration'), ['controller' => 'Admin', 'action' => 'index'], array('class' => 'btn  btn-success', 'style' => 'margin-top: 10px; padding:5px 10px;')).'
         &nbsp;</div>
 
 
@@ -97,7 +119,6 @@
             <ul class="nav navbar-nav navbar-right">
               <li><?= $this->Html->link(__('<span class="glyphicon glyphicon-question-sign"></span>&nbsp;Aide'), ['action' => 'help'], array('escape' => false)) ?></li>
 
-               <li><a href="mailto:preaultc@gmail.com?subject=[Media - Bug]&body=Adresse de la page : <?php echo $_SERVER['REQUEST_URI'] ?> %0A%0ADescription du problème :" ><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Un bug</a></li>
 
 
 
@@ -105,11 +126,13 @@
                 <li><?= $this->Auth->logoutLink() ?></li>
             </ul>
             <?php if ($this->request->params['controller']=='Films'||$this->request->params['controller']=='Series'): ?>
-              <div class="input-group  nav navbar-nav navbar-right" style="margin-top: 0.7%;">
-                <?= $this->Html->link(__('<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Partage tes '.$this->request->params['controller'].''),
-                ['action' => 'upload_user'], array('class' =>'btn btn-sm btn-info', 'escape' => false )) ?>
+              <?php if ($user_up != 'false'): ?>
+                <div class="input-group  nav navbar-nav navbar-right" style="margin-top: 0.7%;">
+                  <?= $this->Html->link(__('<span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;Partage tes '.$this->request->params['controller'].''),
+                  ['action' => 'upload_user'], array('class' =>'btn btn-sm btn-info', 'escape' => false )) ?>
 
-              </div>
+                </div>
+              <?php endif; ?>
             <?php endif; ?>
 
 
@@ -127,7 +150,7 @@
 <br>
     <div class="navbar navbar-inverse navbar-fixed-bottom" role="navigation" style="margin-top: 30px; border: 1px solid #e3e3e3; background-color: #f5f5f5;  min-height:0px; height:20px;">
           <div class="container">
-          <p class="text-muted pull-right">Media V2.0 - Fièrement codé par S'Tonfute 105-64Me213</p>
+          <p class="text-muted pull-right">Media V2.1 - Fièrement codé par S'Tonfute 105-64Me213</p>
           </div>
         </div>
 

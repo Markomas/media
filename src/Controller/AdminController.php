@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Datasource\ConnectionManager;
+
 
 /**
  * Config Controller
@@ -18,6 +20,26 @@ class AdminController extends AppController
      */
     public function index()
     {
+
+
+      // ---- METHODE temporaire ! ----
+      // ConnectionManager::get('default')->disconnect();
+      // ConnectionManager::drop('default');
+      // ConnectionManager::config('default', [
+      //     'className' => 'Cake\Database\Connection',
+      //     'driver' => 'Cake\Database\Driver\Mysql',
+      //     'persistent' => false,
+      //     'host' => 'localhost',
+      //     'username' => 'my_app',
+      //     'password' => 'sekret',
+      //     'database' => 'my_app',
+      //     'encoding' => 'utf8',
+      //     'timezone' => 'UTC',
+      //     'cacheMetadata' => true,
+      // ]);
+      // ConnectionManager::get('default')->connect();
+      // $db = ConnectionManager::get('default');
+
       $this->loadModel('Films');
       $this->loadModel('Series');
       $this->loadModel('Music');

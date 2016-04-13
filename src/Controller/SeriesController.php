@@ -338,9 +338,13 @@ class SeriesController extends AppController
 
         $this->loadModel('Folders');
         $this->loadModel('Rmwords');
+        $this->loadModel('Config');
+
 
         // on récupère les variables issues des autres controleurs
         $settings = $this->Folders->findByType('Series')->first();
+        $symlink = $this->Config->findByNom('symlink')->first()['valeur'];
+
         $rm_start = explode(',', $this->Rmwords->findByEnd('0')->first()['words']);
         $rm_end = explode(',', $this->Rmwords->findByEnd('1')->first()['words']);
         $filetype = $settings['filetype'];
@@ -398,12 +402,22 @@ class SeriesController extends AppController
 
             // On créé le fichier avant > permet de créer les dossiers 20XX
             $file_move = new File ($move, true, 0777);
-            // on move ! avec rename !
-            if(rename($serie_path, $move)){
+
+            if ($symlink == 'true') {
+              // on delete le fichier !
+              unlink($move);
+              // on fabrique le symlink
+              symlink($serie_path, $move);
               array_push($series_ok, 'OK');
-              //chmod($move, 0777);
-            }else {
-              array_push($series_ok, 'Erreur');
+
+            } else {
+              // on move ! avec rename !
+              if(rename($serie_path, $move)){
+                array_push($series_ok, 'OK');
+                //chmod($move, 0777);
+              }else {
+                array_push($series_ok, 'Erreur');
+              }
             }
 
           }
@@ -431,9 +445,12 @@ class SeriesController extends AppController
 
       $this->loadModel('Folders');
       $this->loadModel('Rmwords');
+      $this->loadModel('Config');
 
       // on récupère les variables issues des autres controleurs
       $settings = $this->Folders->findByType('Series')->first();
+      $symlink = $this->Config->findByNom('symlink')->first()['valeur'];
+
       $rm_start = explode(',', $this->Rmwords->findByEnd('0')->first()['words']);
       $rm_end = explode(',', $this->Rmwords->findByEnd('1')->first()['words']);
       $filetype = $settings['filetype'];
@@ -461,6 +478,13 @@ class SeriesController extends AppController
       $info_old = array();
 
       foreach ($series_original as $serie) {
+
+        if ($symlink == 'true') {
+          $full_path = readlink($film);
+        } else {
+          $full_path = $film;
+        }
+
         $serie = str_replace($path.'/', '', $serie);
         $serie_path = $serie;
 
@@ -470,7 +494,7 @@ class SeriesController extends AppController
         $episode = substr(findEpisode($serie),1);
 
 
-        if($this->Series->findByFile($serie_path)->first()['file']!=$serie_path){
+        if($this->Series->findByFile($serie_path)->first()['file']!=$serie_path || $this->Series->findByOriginalFile($full_path)->first()['original_file']!=$full_path ){
           // on push les data dans les tableaux
           array_push($series_path, $serie_path);
           array_push($series_name, $name);
@@ -486,10 +510,10 @@ class SeriesController extends AppController
           if ($name == $name_old) {
 
             // On récup' les data
-            $serie_info = getEpisodeInfo($info_old, $season, $episode, $serie_path, $path, $apikey);
+            $serie_info = getEpisodeInfo($info_old, $season, $episode, $serie_path, $path, $apikey, $symlink);
           } else {
             // Sinon procédure classique, on grab toutes les data !
-            $serie_info = getSerie($name, $season, $episode, $serie_path, $path, $apikey);
+            $serie_info = getSerie($name, $season, $episode, $serie_path, $path, $apikey, $symlink);
           }
 
 
@@ -528,10 +552,10 @@ class SeriesController extends AppController
 
     public function stream($id = null)
     {
-      $this->loadModel('Config');
+      $this->loadModel('Urls');
 
       // on récupère les variables issues des autres controleurs
-      $settings = $this->Config->findByNom('url_serie')->first();
+      $settings = $this->Urls->findByNom('url_serie')->first();
 
       if ($settings) {
           $path = $settings['valeur'];
@@ -561,10 +585,10 @@ class SeriesController extends AppController
 
     public function download($id = null)
     {
-      $this->loadModel('Config');
+      $this->loadModel('Urls');
 
       // on récupère les variables issues des autres controleurs
-      $settings = $this->Config->findByNom('url_serie')->first();
+      $settings = $this->Urls->findByNom('url_serie')->first();
 
       if ($settings) {
           $path = $settings['valeur'];
@@ -724,6 +748,8 @@ class SeriesController extends AppController
         $this->loadModel('Config');
 
         $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
+
+
         $tmdb = new TMDB($apikey, 'fr');
 
         // on récupère les variables issues des autres controleurs
@@ -823,10 +849,10 @@ class SeriesController extends AppController
 
     public function moderateStream($file, $titre)
     {
-      $this->loadModel('Config');
+      $this->loadModel('Urls');
 
       // on récupère les variables issues des autres controleurs
-      $settings = $this->Config->findByNom('url_serie_mod')->first();
+      $settings = $this->Urls->findByNom('url_serie_mod')->first();
 
       if ($settings) {
           $path = $settings['valeur'];

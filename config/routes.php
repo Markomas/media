@@ -20,6 +20,8 @@
 
 use Cake\Core\Plugin;
 use Cake\Routing\Router;
+use Cake\Datasource\ConnectionManager;
+
 
 /**
  * The default class to use for all routes
@@ -42,6 +44,14 @@ use Cake\Routing\Router;
 Router::defaultRouteClass('DashedRoute');
 
 Router::connect('/admin', array('controller' => 'Admin', 'action' => 'index', 'admin' => true));
+
+if (file_exists(ROOT . '/config/installed.txt')) {
+  Router::connect('/install/*', array('controller' => 'Films', 'action' => 'indexUser'));
+} else {
+    //ConnectionManager::drop('default');
+    Router::connect('/', array('controller' => 'Install', 'action' => 'index'));
+
+}
 
 
 Router::scope('/', function ($routes) {

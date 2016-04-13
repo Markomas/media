@@ -16,6 +16,8 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\Datasource\ConnectionManager;
+
 
 
 
@@ -59,7 +61,11 @@ class AppController extends Controller
     {
 
 
+
+
         parent::initialize();
+
+
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
@@ -76,6 +82,32 @@ class AppController extends Controller
             ]
         ]);
 
+
+      if (file_exists(ROOT . '/config/installed.txt')) {
+          // si app installée
+
+        // Recup' des config' diverses !
+        $this->loadModel('Config');
+
+        // Menus actifs
+        $menu = $this->Config->findByNom('menu')->first()['valeur'];
+        $menu = explode(',', $menu);
+        $this->set('menu', $menu);
+
+        // activation de l'upload user
+        $user_up = $this->Config->findByNom('user_upload')->first()['valeur'];
+
+        $this->set('user_up', $user_up);
+        }
+        else {
+          //si pas installé !
+          $this->set('user_up', '');
+          $this->set('menu', ['']);
+
+        }
+
+        // Fin récup'config !
+
     }
 
     function origReferer(){
@@ -86,7 +118,7 @@ class AppController extends Controller
     public function isAuthorized($user)
     {
         // Admin peuvent accéder à chaque action
-        if (isset($user['role']) && $user['role'] === 'admin') {
+        if (isset($user['role']) && $user['role'] == 'admin') {
             return true;
         }
 
@@ -98,8 +130,27 @@ class AppController extends Controller
 
     public function beforeFilter(Event $event)
        {
+         if (file_exists(ROOT . '/config/installed.txt')) {
+         // Recup' des config' diverses !
+         $this->loadModel('Config');
 
-        $this->Auth->allow(['indexUser', 'indexSplash', 'viewUser', 'uploadUser', 'download', 'stream', 'login', 'logout', 'search', 'indexArtist', 'indexAlbum', 'album', 'indexView', 'viewAlbum', 'viewArtist']);
+         // Menus actifs
+         $access = $this->Config->findByNom('access')->first()['valeur'];
+
+         if ($access == 'public') {
+           $this->Auth->allow(['indexUser', 'indexSplash', 'viewUser', 'uploadUser', 'download', 'stream', 'login', 'logout', 'search', 'indexArtist', 'indexAlbum', 'album', 'indexView', 'viewAlbum', 'viewArtist']);
+         }
+         else {
+           $this->Auth->allow(['login', 'logout']);
+           // bug voir MP kevin13
+           if (isset($this->Auth->user()['role']) && $this->Auth->user()['role'] == 'viewer') {
+             $this->Auth->allow(['indexUser', 'indexSplash', 'viewUser', 'uploadUser', 'download', 'stream', 'login', 'logout', 'search', 'indexArtist', 'indexAlbum', 'album', 'indexView', 'viewAlbum', 'viewArtist']);
+           }
+         }
+       } else {
+        $this->Auth->allow();
+       }
+
        }
 
 

@@ -86,6 +86,10 @@ class FilmsTable extends Table
             ->notEmpty('file_film');
 
         $validator
+            ->requirePresence('original_file', 'create')
+            ->notEmpty('original_file');
+
+        $validator
             ->add('date_ajout', 'valid', ['rule' => 'datetime'])
             ->allowEmpty('date_ajout');
 
