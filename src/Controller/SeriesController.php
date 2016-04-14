@@ -380,8 +380,12 @@ class SeriesController extends AppController
 
 
         foreach ($series_original as $serie) {
+          $full_path = $serie;
           $serie_path = $serie;
           $serie = str_replace($path2, '', $serie);
+
+          if($this->Series->findByOriginalFile($full_path)->first()['original_file']!=$full_path ){
+
           $ext = findExt($serie, $filetype);
           $name = rm_words($serie, $rm_end, $rm_start, '1');
           $season = findSeason($serie);
@@ -421,6 +425,7 @@ class SeriesController extends AppController
             }
 
           }
+        }
 
         }
         if (count($series_path)==0){

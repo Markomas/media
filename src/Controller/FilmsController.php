@@ -749,8 +749,13 @@ $films = $this->Films->find('all',array(
 
 
         foreach ($films_original as $film) {
+
+          $full_path = $film;
           $film_path = $film;
           $film = str_replace($path2.'/', '', $film);
+
+      if($this->Films->findByOriginalFile($full_path)->first()['original_file']!=$full_path){
+
           $year = findYear($film);
           $ext = findExt($film, $filetype);
           $name = rm_words($film, $rm_end, $rm_start);
@@ -788,6 +793,7 @@ $films = $this->Films->find('all',array(
 
 
           }
+        }
 
         }
         if (count($films_path)==0){
