@@ -49,9 +49,7 @@ logs/*
 /logs/*
 !/logs/empty
 
-/webroot/img/*
-!/webroot/img/album/no-cover.png
-!/webroot/img/poster/no-cover.png
+
 
 
 /webroot/film_upload/*
