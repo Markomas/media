@@ -154,13 +154,13 @@ class InstallController extends AppController
 
     public function dbcreate()
     {
-      $conn = ConnectionManager::get('default');
 
       if ($this->request->is('post')) {
           $data = $this->request->data;
           // on hash le pass
           $data['password'] = (new DefaultPasswordHasher)->hash($data['password']);
-
+          ConnectionManager::get('default')->connect();
+          $conn = ConnectionManager::get('default');
           $sql_request = 'INSERT INTO `users` (`id`, `username`, `password`, `role`, `created`, `modified`) VALUES
           (1, "'.$data['login'].'", "'.$data['password'].'", "admin", NULL, NULL)';
 
@@ -173,7 +173,8 @@ class InstallController extends AppController
           }
 
       }
-
+      ConnectionManager::get('default')->connect();
+      $conn = ConnectionManager::get('default');
       $sql_request = file_get_contents(ROOT . '/config/bdd.sql');
       if ($conn->query($sql_request)) {
         $this->Flash->success(__("Données importées dans la base de donnée avec succès !"));

@@ -27,15 +27,6 @@
     </div>
 <?php endif; ?>
 
-<?php if (in_array ("mod_rewrite", apache_get_modules())): ?>
-  <div class="alert alert-success">
-    <li>Mod_rewrite requis : Activé !</li>
-  </div>
-  <?php else: ?>
-    <div class="alert alert-danger">
-      <li>Mod_rewrite requis</li>
-    </div>
-<?php endif; ?>
 
 </div>
 
