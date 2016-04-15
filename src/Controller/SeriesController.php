@@ -485,9 +485,9 @@ class SeriesController extends AppController
       foreach ($series_original as $serie) {
 
         if ($symlink == 'true') {
-          $full_path = readlink($film);
+          $full_path = readlink($serie);
         } else {
-          $full_path = $film;
+          $full_path = $serie;
         }
 
         $serie = str_replace($path.'/', '', $serie);
