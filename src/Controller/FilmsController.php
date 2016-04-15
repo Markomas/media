@@ -104,7 +104,7 @@ $films = $this->Films->find('all',array(
             $tmp_path = $file['tmp_name'];
 
             $filetype = $settings['filetype'];
-            $ext = findExt($file['name'], $filetype);
+            $ext = findExt2($tmp_path);
 
             if($ext != false){
                 $file_move = new File ($move, true, 0777);
@@ -158,7 +158,7 @@ $films = $this->Films->find('all',array(
           foreach ($files['file'] as $file) {
 
             $year = findYear($file['name']);
-            $ext = findExt($file['name'], $filetype);
+            $ext = findExt2($file['tmp_name']);
             // Traitement avec les mots clés
             $name = rm_words($file['name'], $rm_end, $rm_start);
 
@@ -166,7 +166,7 @@ $films = $this->Films->find('all',array(
             $tmp_path = $file['tmp_name'];
 
             $filetype = $settings['filetype'];
-            $ext = findExt($file['name'], $filetype);
+            $ext = findExt2($file['tmp_name']);
 
             if($ext != false){
                 $file_move = new File ($move, true, 0777);
@@ -757,7 +757,7 @@ $films = $this->Films->find('all',array(
       if($this->Films->findByOriginalFile($full_path)->first()['original_file']!=$full_path){
 
           $year = findYear($film);
-          $ext = findExt($film, $filetype);
+          $ext = findExt2($film_path);
           $name = rm_words($film, $rm_end, $rm_start);
 
           $move = movePath($path, $name, $year, $ext);

@@ -140,6 +140,19 @@ function findExt($string, $ext)
 
 }
 
+function findExt2($file)
+{
+      $info = new SplFileInfo($file);
+      $ext = '.'.$info->getExtension();
+
+      if (isset ($ext)){
+        return $ext;
+      } else {
+        return false;
+      }
+
+}
+
 function movePathSerie ($path, $name, $season, $episode, $ext)
 {
     $newpath = $path.'/'.$name.'/'.$season.'/'.$name.'-'.$season.$episode.$ext;

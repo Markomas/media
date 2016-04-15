@@ -144,7 +144,7 @@ class SeriesController extends AppController
             $tmp_path = $file['tmp_name'];
 
             $filetype = $settings['filetype'];
-            $ext = findExt($file['name'], $filetype);
+            $ext = findExt2($tmp_path);
 
             if($ext != false){
                 $file_move = new File ($move, true, 0777);
@@ -194,7 +194,7 @@ class SeriesController extends AppController
               $tmp_path = $file['tmp_name'];
 
               $filetype = $settings['filetype'];
-              $ext = findExt($file['name'], $filetype);
+              $ext = findExt2($tmp_path);
 
               if($ext != false){
                   $file_move = new File ($move, true, 0777);
@@ -386,7 +386,7 @@ class SeriesController extends AppController
 
           if($this->Series->findByOriginalFile($full_path)->first()['original_file']!=$full_path ){
 
-          $ext = findExt($serie, $filetype);
+          $ext = findExt2($serie_path);
           $name = rm_words($serie, $rm_end, $rm_start, '1');
           $season = findSeason($serie);
           $episode = findEpisode($serie);
@@ -493,7 +493,7 @@ class SeriesController extends AppController
         $serie = str_replace($path.'/', '', $serie);
         $serie_path = $serie;
 
-        $ext = findExt($serie, $filetype);
+        $ext = findExt2($serie_path);
         $name = rm_words($serie, $rm_end, $rm_start, '1');
         $season = substr(findSeason($serie),1);
         $episode = substr(findEpisode($serie),1);
