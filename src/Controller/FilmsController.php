@@ -125,6 +125,7 @@ $films = $this->Films->find('all',array(
       }
       $upload = '';
       $this->set('upload_dir', $path);
+      $this->set('file_number', count_files($path));
       $this->set(compact('upload'));
       $this->set('_serialize', ['upload']);
     }

@@ -46,7 +46,7 @@
 <div class="col-xs-12">
 
     <div class="well col-xs-6 container">
-      <?php  echo count(scandir($upload_dir))-2; ?>
+      <?= $file_number ?>
        fichiers en attente dans le dossier d'upload <span class="glyphicon glyphicon-arrow-right"></span>
         1ère étape
                <span class="glyphicon glyphicon-arrow-right"></span>

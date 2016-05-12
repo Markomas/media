@@ -8,6 +8,22 @@ function size($path)
     return number_format($size / pow(1000, $power), 2, '.', ',') . ' ' . $units[$power];
 }
 
+function count_files($dir)
+{
+    $num = 0 ;
+    $dir_handle = opendir($dir);
+      while($entry = readdir($dir_handle)){
+          if(is_file($dir.'/'.$entry)){
+              $num++;
+          }
+          elseif(is_dir($dir.'/'.$entry) && $entry != ".." && $entry != "."){
+              $num += count_files($dir.'/'.$entry);
+          }
+      }
+    closedir($dir_handle);
+    return $num;
+}
+
 function downloadImg($link, $id)
 {
   $content = file_get_contents($link);

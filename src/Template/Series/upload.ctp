@@ -48,22 +48,7 @@
 <div class="col-xs-12">
 
     <div class="well col-xs-6 container">
-      <?php  function count_files($dir)
-{
-    $num = 0 ;
-    $dir_handle = opendir($dir);
-    while($entry = readdir($dir_handle)){
-        if(is_file($dir.'/'.$entry)){
-            $num++;
-        }
-        elseif(is_dir($dir.'/'.$entry) && $entry != ".." && $entry != "."){
-            $num += count_files($dir.'/'.$entry);
-        }
-    }
-    closedir($dir_handle);
-    return $num;
-}
-echo count_files($upload_dir); ?>
+      <?= $file_number ?>
        fichiers en attente dans le dossier d'upload <span class="glyphicon glyphicon-arrow-right"></span>
         1ère étape
                <span class="glyphicon glyphicon-arrow-right"></span>
