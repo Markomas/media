@@ -17,7 +17,6 @@
       <ul class="nav navbar-nav">
       <li><?= $this->Paginator->sort('id', 'Les derniers ajouts', ['direction' => 'desc']) ?></li>
       <li><?= $this->Paginator->sort('titre', 'A-Z', ['direction' => 'asc']) ?></li>
-
       <li><?= $this->Paginator->sort('annee', 'Les + récents', ['direction' => 'desc']) ?></li>
       <li><?= $this->Paginator->sort('note', 'Les mieux notés', ['direction' => 'desc']) ?></li>
       <li><?= $this->Paginator->sort('view', 'Les + vus', ['direction' => 'desc']) ?></li>
