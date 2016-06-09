@@ -48,6 +48,10 @@ logs/*
 !/tmp/tests/empty
 
 /logs/*
+/log/cli-debug.log
+/log/cli-error.log
+/log/debug.log
+/log/error.log
 !/logs/empty
 
 
