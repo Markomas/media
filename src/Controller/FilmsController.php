@@ -921,10 +921,10 @@ $films = $this->Films->find('all',array(
       $this->loadModel('Config');
 
       $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
-      debug($apikey);
+
       $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
-      debug($conf_api);
-      //$tmdb = new TMDB($conf_api);
+
+      $tmdb = new TMDB($conf_api);
       $film = $this->Films->newEntity();
       $file =  str_replace('-slash-', '/', $file);
       $file =  str_replace('-dot-', '.', $file);

@@ -10,8 +10,8 @@ use Cake\Filesystem\File;
 
 
 require_once (ROOT .DS."webroot/functions.php");
-require_once(ROOT .DS. 'vendor' . DS . 'TMDB' . DS . 'TMDB.php');
-use TMDB\TMDB;
+require_once(ROOT .DS. "webroot/tmdb-api.php");
+
 
 
 /**
