@@ -30,19 +30,19 @@
  *
 */
 
-include("controller/classes/data/Collection.php");
-include("controller/classes/data/Company.php");
-include("controller/classes/data/Episode.php");
-include("controller/classes/data/Genre.php");
-include("controller/classes/data/Movie.php");
-include("controller/classes/data/Person.php");
-include("controller/classes/data/Role.php");
-include("controller/classes/data/Season.php");
-include("controller/classes/data/TVShow.php");
-include("controller/classes/roles/MovieRole.php");
-include("controller/classes/roles/TVShowRole.php");
-include("controller/classes/config/APIConfiguration.php");
-include("controller/classes/config/Configuration.php");
+require_once("controller/classes/data/Collection.php");
+require_once("controller/classes/data/Company.php");
+require_once("controller/classes/data/Episode.php");
+require_once("controller/classes/data/Genre.php");
+require_once("controller/classes/data/Movie.php");
+require_once("controller/classes/data/Person.php");
+require_once("controller/classes/data/Role.php");
+require_once("controller/classes/data/Season.php");
+require_once("controller/classes/data/TVShow.php");
+require_once("controller/classes/roles/MovieRole.php");
+require_once("controller/classes/roles/TVShowRole.php");
+require_once("controller/classes/config/APIConfiguration.php");
+require_once("controller/classes/config/Configuration.php");
 
 class TMDB {
 
