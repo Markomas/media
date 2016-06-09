@@ -1,5 +1,4 @@
 <?php
-namespace TMDB;
 /**
  * TMDB API v3 PHP class - wrapper to API version 3 of 'themoviedb.org
  * API Documentation: http://help.themoviedb.org/kb/api/about-3
