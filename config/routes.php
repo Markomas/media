@@ -46,7 +46,13 @@ Router::defaultRouteClass('DashedRoute');
 Router::connect('/admin', array('controller' => 'Admin', 'action' => 'index', 'admin' => true));
 
 if (file_exists(ROOT . '/config/installed.txt')) {
-  Router::connect('/install/*', array('controller' => 'Films', 'action' => 'indexUser'));
+  $version_number = file_get_contents(ROOT . '/config/installed.txt', FILE_USE_INCLUDE_PATH);
+  if ($version_number == '2.3') {
+    Router::connect('/install/*', array('controller' => 'Films', 'action' => 'indexUser'));
+  }
+  else {
+    Router::connect('/', array('controller' => 'Install', 'action' => 'index'));
+  }
 } else {
     //ConnectionManager::drop('default');
     Router::connect('/', array('controller' => 'Install', 'action' => 'index'));

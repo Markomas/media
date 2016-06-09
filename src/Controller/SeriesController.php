@@ -33,15 +33,21 @@ class SeriesController extends AppController
      *
      * @return void
      */
+
+
     public function indexAdmin()
     {
       $this->loadModel('Folders');
         $user_path = $this->Folders->findByType('Serie_user')->first()['path'];
         $this->set('user_path', count(scandir($user_path))-2);
 
-        $this->set('series', $this->paginate($this->Series));
+        $this->set('series', $this->paginate($this->Series->find()->distinct('id_tmdb')));
+        $this->paginate = [ 'order' => ['Series.id_tmdb' => 'desc', 'Series.season' => 'desc', 'Series.episode' => 'desc']];
+        $this->set('series_all', $this->paginate($this->Series));
+
         $this->set('_serialize', ['series']);
     }
+
 
 
     public function indexUser($view='grid')
@@ -334,6 +340,21 @@ class SeriesController extends AppController
         return $this->redirect(['action' => 'indexAdmin']);
     }
 
+    public function delmultiple($ids = null)
+    {
+        $ids = $this->request->input('json_decode');
+        debug($ids);
+
+        foreach ($ids as $id) {
+          $series = $this->Series->get($id);
+          if ($this->Series->delete($series)) {
+              $this->Flash->success(__('The series has been deleted.'));
+          } else {
+              $this->Flash->error(__('The series could not be deleted. Please, try again.'));
+          }
+        }
+        return $this->redirect(['action' => 'indexAdmin']);
+    }
 
     public function rename(){
 
@@ -384,11 +405,10 @@ class SeriesController extends AppController
           $full_path = $serie;
           $serie_path = $serie;
           $serie = str_replace($path2, '', $serie);
-
-          if($this->Series->findByOriginalFile($full_path)->first()['original_file']!=$full_path ){
+        if($this->Series->findByOriginalFile($full_path)->first()['original_file']!=$full_path){
 
           $ext = findExt2($serie_path);
-          $name = rm_words($serie, $rm_end, $rm_start, '1');
+          $name = rm_words($serie, $rm_end, $rm_start, $ext, '1');
           $season = findSeason($serie);
           $episode = findEpisode($serie);
           $move = movePathSerie($path, $name, $season, $episode, $ext);
@@ -403,6 +423,7 @@ class SeriesController extends AppController
             array_push($series_episode, $episode);
             array_push($series_ext, $ext);
             array_push($series_move, $move);
+
 
 
             // On créé le fichier avant > permet de créer les dossiers 20XX
@@ -471,7 +492,6 @@ class SeriesController extends AppController
 
       $dir = new Folder($path);
 
-
       $series_original = $dir->findRecursive('^.*\.('.str_replace(',', '|', $filetype).')$');
       // on initialise les tableaux
       $series_name = array();
@@ -484,7 +504,6 @@ class SeriesController extends AppController
       $info_old = array();
 
       foreach ($series_original as $serie) {
-
         if ($symlink == 'true') {
           $full_path = readlink($serie);
         } else {
@@ -495,10 +514,9 @@ class SeriesController extends AppController
         $serie_path = $serie;
 
         $ext = findExt2($serie_path);
-        $name = rm_words($serie, $rm_end, $rm_start, '1');
+        $name = rm_words($serie, $rm_end, $rm_start, $ext, '1');
         $season = substr(findSeason($serie),1);
         $episode = substr(findEpisode($serie),1);
-
 
         if($this->Series->findByFile($serie_path)->first()['file']!=$serie_path || $this->Series->findByOriginalFile($full_path)->first()['original_file']!=$full_path ){
           // on push les data dans les tableaux
@@ -619,8 +637,11 @@ class SeriesController extends AppController
       $this->loadModel('Config');
 
       $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
-      $tmdb = new TMDB($apikey, 'fr');
-      $tmdb_en = new TMDB($apikey, 'en');
+      $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
+      $conf_api_en = array('apikey' => $apikey, 'lang' => 'en' );
+
+      $tmdb = new TMDB($conf_api);
+      $tmdb_en = new TMDB($conf_api_en);
 
       $film = $this->Series->newEntity();
       $series = $tmdb->searchTVShow($search);
@@ -754,9 +775,10 @@ class SeriesController extends AppController
         $this->loadModel('Config');
 
         $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
+        $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
 
 
-        $tmdb = new TMDB($apikey, 'fr');
+        $tmdb = new TMDB($conf_api);
 
         // on récupère les variables issues des autres controleurs
         $settings = $this->Folders->findByType('Serie_user')->first();
@@ -802,10 +824,12 @@ class SeriesController extends AppController
           $audio = getLang($serie);
           $sub = getSub($serie);
           $size = size($serie);
+          $ext = findExt2($serie);
+
           $serie = str_replace($path, '', $serie);
           $serie = str_replace('/', '', $serie);
           $serie_file = $serie;
-          $name = rm_words($serie, $rm_end, $rm_start, '1');
+          $name = rm_words($serie, $rm_end, $rm_start, $ext, '1');
           $season = substr(findSeason($serie),1);
           $episode = substr(findEpisode($serie),1);
 

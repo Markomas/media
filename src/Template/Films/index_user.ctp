@@ -49,7 +49,7 @@
       <ul class="nav navbar-nav">
       <li><?= $this->Paginator->sort('created', 'Les derniers ajouts', ['direction' => 'desc']) ?></li>
       <li><?= $this->Paginator->sort('titre_film', 'A-Z', ['direction' => 'asc']) ?></li>
-      
+
       <li><?= $this->Paginator->sort('annee_film', 'Les + récents', ['direction' => 'desc']) ?></li>
       <li><?= $this->Paginator->sort('note_film', 'Les mieux notés', ['direction' => 'desc']) ?></li>
       <li><?= $this->Paginator->sort('view', 'Les + vus', ['direction' => 'desc']) ?></li>

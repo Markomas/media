@@ -1,13 +1,6 @@
-CREATE TABLE IF NOT EXISTS `urls` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nom` varchar(255) NOT NULL,
-  `valeur` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+DELETE FROM `rmwords` WHERE `rmwords`.`id` = 1;
+DELETE FROM `rmwords` WHERE `rmwords`.`id` = 2;
 
-ALTER TABLE  `films` ADD  `original_file` TEXT NULL AFTER  `file_film` ;
-ALTER TABLE  `series` ADD  `original_file` TEXT NULL AFTER  `file` ;
-ALTER TABLE  `music` ADD  `original_file` TEXT NULL AFTER  `file` ;
-
-INSERT INTO urls(id, nom, valeur) SELECT id, nom, valeur FROM config WHERE id BETWEEN '1' AND '8';
-DELETE FROM config WHERE id BETWEEN '1' AND '8';
+INSERT INTO `rmwords` (`id`, `words`, `end`) VALUES
+(1, "dvdrip,truefrench,french,xvid,divx,vostfr,hdtv,hdts,x265,hevc,x264,bluray,dts,multi,fastsub,hdrip,hc,telesync,zfg,bdrip,qc,us,subfrench,sub,limited", 1),
+(2, "\\[ www.cpasbien.cm \\]", 0);

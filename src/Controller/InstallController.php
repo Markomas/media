@@ -22,12 +22,17 @@ class InstallController extends AppController
 
     public function index()
     {
+      if (!file_exists(ROOT . '/config/app.php')) {
+        copy(ROOT . '/config/app.default.php', ROOT . '/config/app.php');
+      }
 
     }
 
     public function finish()
     {
+      unlink(ROOT . '/config/installed.txt');
       new File (ROOT . '/config/installed.txt', true, 0777);
+      file_put_contents(ROOT . '/config/installed.txt', '2.3');
     }
 
     public function migrate()
@@ -39,26 +44,13 @@ class InstallController extends AppController
       $sql_request = file_get_contents(ROOT . '/config/bdd_migrate.sql');
       if ($conn->query($sql_request)) {
         $this->Flash->success(__("Base de données à jour !"));
-      }
-
-      if ($this->request->is('post')) {
-          $data = $this->request->data;
-
-          $sql_request = 'INSERT INTO `config` (`id`, `nom`, `valeur`) VALUES
-          (10, "access", "'.$data['Access'].'"),
-          (11, "menu", "'.$data['Menu'].'"),
-          (12, "user_upload", "'.$data['Upload'].'"),
-          (13, "symlink", "'.$data['Symlink'].'");';
-
-          if ($conn->query($sql_request)) {
-            $this->Flash->success(__("Media configuré !"));
-            return $this->redirect(['action' => 'finish']);
+        return $this->redirect(['action' => 'finish']);
 
           } else {
             $this->Flash->error(__("Erreur"));
           }
 
-      }
+
 
 
 
@@ -192,7 +184,7 @@ class InstallController extends AppController
           // Read app.PHP file and store to new file
               $handle = @fopen(ROOT . '/config/app.php', "r");
               if ($handle == false) {
-                $handle = @fopen(ROOT . '/config/app.dafault.php', "r");
+                $handle = @fopen(ROOT . '/config/app.default.php', "r");
               }
               new File (ROOT . '/config/appNew.php', true, 0777);
               $handleWrite = @fopen(ROOT . '/config/appNew.php', "w");

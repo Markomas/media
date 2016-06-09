@@ -161,7 +161,7 @@ $films = $this->Films->find('all',array(
             $year = findYear($file['name']);
             $ext = findExt2($file['tmp_name']);
             // Traitement avec les mots clés
-            $name = rm_words($file['name'], $rm_end, $rm_start);
+            $name = rm_words($file['name'], $rm_end, $rm_start, $ext);
 
             $move = movePathModerate($path, $name, $year, $ext);
             $tmp_path = $file['tmp_name'];
@@ -407,8 +407,9 @@ $films = $this->Films->find('all',array(
        $this->loadModel('Config');
 
        $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
+       $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
 
-       $tmdb = new TMDB($apikey, 'fr');
+       $tmdb = new TMDB($conf_api);
        $film = $this->Films->newEntity();
        $movies = $tmdb->searchMovie($search);
       $this->set('search', $search);
@@ -662,7 +663,8 @@ $films = $this->Films->find('all',array(
         $film = str_replace($path.'/', '', $film);
         $film_path = $film;
         $year = findYear($film);
-        $name = rm_words($film, $rm_end, $rm_start);
+        $ext = findExt2($full_path);
+        $name = rm_words($film, $rm_end, $rm_start, $ext);
 
         if($this->Films->findByFileFilm($film_path)->first()['file_film']!=$film_path || $this->Films->findByOriginalFile($full_path)->first()['original_file']!=$full_path){
           // on push les data dans les tableaux
@@ -676,8 +678,7 @@ $films = $this->Films->find('all',array(
 
           $film_info = getFilm($name, $year, $film_path, $path, $apikey, $symlink);
 
-
-          if (is_array($film_info)){
+          if (is_array($film_info) && $this->Films->findByTmdb($film_info['tmdb'])->first()==null){
             $film_add = $this->Films->newEntity($film_info, ['validate' => false]);
             $this->Films->save($film_add);
             array_push($films_ok, 'OK');
@@ -759,7 +760,7 @@ $films = $this->Films->find('all',array(
 
           $year = findYear($film);
           $ext = findExt2($film_path);
-          $name = rm_words($film, $rm_end, $rm_start);
+          $name = rm_words($film, $rm_end, $rm_start, $ext);
 
           $move = movePath($path, $name, $year, $ext);
 
@@ -819,7 +820,9 @@ $films = $this->Films->find('all',array(
         $this->loadModel('Config');
 
         $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
-        $tmdb = new TMDB($apikey, 'fr');
+        $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
+
+        $tmdb = new TMDB($conf_api);
 
         // on récupère les variables issues des autres controleurs
         $settings = $this->Folders->findByType('Film_user')->first();
@@ -865,10 +868,12 @@ $films = $this->Films->find('all',array(
           $audio = getLang($film);
           $sub = getSub($film);
           $size = size($film);
+          $ext = findExt2($film);
+
           $film = str_replace($path, '', $film);
           $film = str_replace('/', '', $film);
           $film_file = $film;
-          $name = rm_words($film, $rm_end, $rm_start);
+          $name = rm_words($film, $rm_end, $rm_start, $ext);
           $year = findYear($film);
 
 
@@ -916,7 +921,9 @@ $films = $this->Films->find('all',array(
       $this->loadModel('Config');
 
       $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
-      $tmdb = new TMDB($apikey, 'fr');
+      $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
+
+      $tmdb = new TMDB($conf_api);
       $film = $this->Films->newEntity();
       $file =  str_replace('-slash-', '/', $file);
       $file =  str_replace('-dot-', '.', $file);

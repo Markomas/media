@@ -2,6 +2,9 @@
 
 function size($path)
 {
+    if (is_link($path)) {
+      $path = readlink($path);
+    }
     $size = filesize($path);
     $units = array( 'B', 'Ko', 'Mo', 'Go', 'To', 'PB', 'EB', 'ZB', 'YB');
     $power = $size > 0 ? floor(log($size, 1000)) : 0;
@@ -14,7 +17,11 @@ function count_files($dir)
     $dir_handle = opendir($dir);
       while($entry = readdir($dir_handle)){
           if(is_file($dir.'/'.$entry)){
+            $info = new SplFileInfo($dir.'/'.$entry);
+            $ext = strtolower($info->getExtension());
+            if (in_array($ext, ['avi','mkv','mp4','mov','mpg'])) {
               $num++;
+            }
           }
           elseif(is_dir($dir.'/'.$entry) && $entry != ".." && $entry != "."){
               $num += count_files($dir.'/'.$entry);
@@ -38,14 +45,17 @@ function stripAccents($stripAccents)
           'SOZsozYYuAAAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy');
   }
 
-function rm_words($entry,$DELETED_WORDS,$DELETED_START,$index='0'){
+function rm_words($entry,$DELETED_WORDS,$DELETED_START, $ext, $index='0'){
 	$entry = strtolower($entry);
 
     if (($pos = strripos($entry, '/')) != false) {
       $entry = substr($entry, $pos+1);
     }
 
+  //on dégage l'extension du fichier
+  $entry = str_replace($ext, "", $entry);
 
+  //
 	$entry = str_replace("_"," ",$entry);
 	$entry = str_replace("-"," ",$entry);
 	$entry = str_replace("."," ",$entry);
@@ -262,8 +272,8 @@ function getFilm ($search, $year, $file, $path, $apikey, $symlink)
 {
 
   require_once ("tmdb-api.php");
-
-  $tmdb = new TMDB($apikey, 'fr');
+  $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
+  $tmdb = new TMDB($conf_api);
 
   $movies = $tmdb->searchMovie($search);
 
@@ -345,9 +355,11 @@ function getFilm ($search, $year, $file, $path, $apikey, $symlink)
 function getEpisodeInfo($old_info, $season, $episode, $file, $path, $apikey, $symlink)
 {
   require_once ("tmdb-api.php");
+  $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
+  $conf_api_en = array('apikey' => $apikey, 'lang' => 'en' );
 
-  $tmdb = new TMDB($apikey, 'fr');
-  $tmdb_en = new TMDB($apikey, 'en');
+  $tmdb = new TMDB($conf_api);
+  $tmdb_en = new TMDB($conf_api_en);
 
   $serie = $tmdb->getTVShow($old_info['id_tmdb']);
 
@@ -381,7 +393,7 @@ function getEpisodeInfo($old_info, $season, $episode, $file, $path, $apikey, $sy
     'def' => $def,
     'audio' => $lang,
     'sub' => $sub,
-    'orignal_file' => $orignal_file);
+    'original_file' => $original_file);
 
     return $array;
 }
@@ -390,9 +402,11 @@ function getSerie ($search, $season, $episode, $file, $path, $apikey, $symlink)
 {
 
   require_once ("tmdb-api.php");
+  $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
+  $conf_api_en = array('apikey' => $apikey, 'lang' => 'en' );
 
-  $tmdb = new TMDB($apikey, 'fr');
-  $tmdb_en = new TMDB($apikey, 'en');
+  $tmdb = new TMDB($conf_api);
+  $tmdb_en = new TMDB($conf_api_en);
 
 
   $series = $tmdb->searchTVShow($search);

@@ -15,3 +15,6 @@
 <?= $this->Form->end() ?>
 </div>
 </div>
+<div class="alert col-xs-5 alert-warning pull-right">
+  Il est nécessaire de créer la base de donnée manuellement ! Le script ne peut la créer automatiquement.
+</div>

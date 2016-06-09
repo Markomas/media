@@ -25,8 +25,6 @@ class MusicController extends AppController
   public function error()
   {
     $this->loadModel('Folders');
-
-
   }
 
 
