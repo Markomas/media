@@ -25,6 +25,15 @@ class InstallController extends AppController
       if (!file_exists(ROOT . '/config/app.php')) {
         copy(ROOT . '/config/app.default.php', ROOT . '/config/app.php');
       }
+      unlink(ROOT . '/logs/cli-debug.log');
+      unlink(ROOT . '/logs/cli-error.log');
+      unlink(ROOT . '/logs/debug.log');
+      unlink(ROOT . '/logs/error.log');
+
+      new File (ROOT . '/logs/cli-debug.log');
+      new File (ROOT . '/logs/cli-error.log');
+      new File (ROOT . '/logs/error.log');
+      new File (ROOT . '/logs/debug.log');
 
     }
 
