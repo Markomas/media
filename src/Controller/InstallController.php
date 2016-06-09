@@ -30,10 +30,10 @@ class InstallController extends AppController
       unlink(ROOT . '/logs/debug.log');
       unlink(ROOT . '/logs/error.log');
 
-      new File (ROOT . '/logs/cli-debug.log');
-      new File (ROOT . '/logs/cli-error.log');
-      new File (ROOT . '/logs/error.log');
-      new File (ROOT . '/logs/debug.log');
+      new File (ROOT . '/logs/cli-debug.log', true, 0777);
+      new File (ROOT . '/logs/cli-error.log', true, 0777);
+      new File (ROOT . '/logs/error.log', true, 0777);
+      new File (ROOT . '/logs/debug.log', true, 0777);
 
     }
 
