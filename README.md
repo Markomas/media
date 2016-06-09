@@ -9,6 +9,29 @@ Cette application développée sous CakePHP permet l'indexation des films, séri
 Elle permet le streaming et le téléchargement depuis l'interface web.
 
 ## Fonctionnalités :
+#### Nouveautés de la version 2.3 :
+- Passage à l'API TMDB V3
+- Regroupement par nom de série en partie Admin et sélection multiple possible.
+- Modification du traitement des fichiers (meilleure détection des noms)
+- Modifications diverses sur la partie installation (app.php, schéma de migration, ...)
+- Correction de nombreux bugs (doublons dans les séries, décompte des fichiers, problèmes symlinks, ...)
+
+_____________________________
+##### Notes pour la mise à jour :
+
+- Nécessaire d'être en version 2.1 minimum pour mettre à jour vers 2.3 ( sinon réinstallation complète ...)
+- Un simple [code]git pull[/code] pour récupérer les modifications
+- Rendez vous à l'url de votre installation de Media et suivez le guide !
+_____________________________
+
+##### Notes pour une nouvelle installation :
+
+- Nécessaire d'avoir un serveur web complet apache/nginx +mysql correctement configuré !
+- Un simple git clone https://github.com/stonfute/media.git pour récupérer l'appli
+- Suivez la documentation ci-dessous 
+- Créez manuellement la base de donnée mysql qui va accueillir Media
+- Rendez vous à l'url de votre installation de Media et suivez le guide !
+_____________________________
 
 #### Nouveautées de la version 2.1 :
   * Mise en place d'un installeur qui facilite la migration et l'installation.
