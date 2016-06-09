@@ -7,6 +7,6 @@
     <h3>Vous pouvez des a présent accèder au site, vous connecter et commencer à importer votre bibliothèque !</h3>
     <br>
     <br>
-    <?= $this->Html->link(__('Se connecter'), ['controller' => 'users', 'action' => 'login'], array('class' => 'btn btn-lg btn-success'))?>
+    <?= $this->Html->link(__('Enjoy !'), ['controller' => 'admin', 'action' => 'index'], array('class' => 'btn btn-lg btn-success'))?>
 
 </div>
