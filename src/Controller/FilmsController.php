@@ -408,6 +408,12 @@ $films = $this->Films->find('all',array(
 
        $apikey = $this->Config->findByNom('tmdb_api_key')->first()['valeur'];
        $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
+       if ($search == '') {
+         $search = $file;
+         $search =  str_replace('-slash-', '/', $search);
+         $search =  str_replace('-dot-', '.', $search);
+       }
+
 
        $tmdb = new TMDB($conf_api);
        $film = $this->Films->newEntity();
@@ -422,11 +428,15 @@ $films = $this->Films->find('all',array(
 
 
        // Si post !
-     if (null != $this->request->query('tmdb') ) {
+     if ($this->request->is('post')) {
 
 
 
        $this->loadModel('Folders');
+       $this->loadModel('Config');
+
+       $symlink = $this->Config->findByNom('symlink')->first()['valeur'];
+
        // on récupère les variables issues des autres controleurs
        $settings = $this->Folders->findByType('Films')->first();
 
@@ -436,7 +446,8 @@ $films = $this->Films->find('all',array(
            $path = false;
            }
 
-        $id_tmdb = $this->request->query('tmdb');
+        $id_tmdb = $this->request->data['tmdb'];
+        debug($id_tmdb);
          $file =  str_replace('-slash-', '/', $file);
          $file =  str_replace('-dot-', '.', $file);
           $movie = $tmdb->getMovie($id_tmdb);
@@ -459,6 +470,11 @@ $films = $this->Films->find('all',array(
           $sub = getSub($path.'/'.$file);
           downloadImg($tmdb->getImageURL('w185') . $movie->getPoster(), $movie->getID());
 
+          if (is_link($path.'/'.$file)) {
+            $original_file = readlink($path.'/'.$file);
+          } else {
+            $original_file = $path.'/'.$file;
+          }
 
           $array = array(
             'tmdb' => $id,
@@ -477,7 +493,7 @@ $films = $this->Films->find('all',array(
             'def_film' => $def,
             'audio' => $lang,
             'sub' => $sub,
-            'original_file' => $file);
+            'original_file' => $original_file);
 
             $film_add = $this->Films->newEntity($array, ['validate' => false]);
             if ($this->Films->save($film_add)) {

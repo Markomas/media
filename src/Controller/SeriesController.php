@@ -638,6 +638,12 @@ class SeriesController extends AppController
       $conf_api = array('apikey' => $apikey, 'lang' => 'fr' );
       $conf_api_en = array('apikey' => $apikey, 'lang' => 'en' );
 
+      if ($search == '') {
+        $search = $file;
+        $search =  str_replace('-slash-', '/', $search);
+        $search =  str_replace('-dot-', '.', $search);
+      }
+
       $tmdb = new TMDB($conf_api);
       $tmdb_en = new TMDB($conf_api_en);
 
@@ -654,7 +660,7 @@ class SeriesController extends AppController
 
       // Si post !
 
-    if (null != $this->request->data('tmdb') ) {
+    if ($this->request->is('post')) {
 
 
 
@@ -668,7 +674,7 @@ class SeriesController extends AppController
           $path = false;
           }
 
-       $id_tmdb = $this->request->data('tmdb');
+       $id_tmdb = $this->request->data['tmdb'];
        $file =  str_replace('-slash-', '/', $file);
        $file =  str_replace('-dot-', '.', $file);
        $serie = $tmdb->getTVShow($id_tmdb);
@@ -703,11 +709,17 @@ class SeriesController extends AppController
        $lang = getLang($path.'/'.$file);
        $sub = getSub($path.'/'.$file);
 
+       if (is_link($path.'/'.$file)) {
+         $original_file = readlink($path.'/'.$file);
+       } else {
+         $original_file = $path.'/'.$file;
+       }
 
        $array = array(
          'id_tmdb' => $id_tmdb,
          'titre' => $titre,
          'file' => $file,
+         'original_file' => $original_file,
          'annee' => $annee,
          'realisateur' => $real,
          'genre' => $genre,
