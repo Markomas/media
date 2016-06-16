@@ -41,7 +41,7 @@ class SeriesController extends AppController
         $this->set('user_path', count(scandir($user_path))-2);
         $this->paginate = ['limit' => 999999, 'order' => ['Series.id_tmdb' => 'desc', 'Series.season' => 'desc', 'Series.episode' => 'desc']];
         $this->set('series', $this->paginate($this->Series->find()->distinct('id_tmdb')));
-        $this->set('series_all', $this->Series);
+        $this->set('series_all', $this->Series->find('all'));
 
         $this->set('_serialize', ['series']);
     }
