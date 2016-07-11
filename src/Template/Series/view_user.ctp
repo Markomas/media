@@ -110,9 +110,24 @@
         </td>
         <td class="">'.
         $this->Html->link(__('<span class="glyphicon glyphicon-download"></span>  Télecharger'), ['action' => 'download', $episode->id], array('class' => 'btn btn-sm btn-success', 'escape' => false ))
-       .'&nbsp;&nbsp;'. $this->Html->link(__('<span class="glyphicon glyphicon-eye-open"></span>  Streaming'), ['action' => 'stream', $episode->id], array('class' =>'btn btn-sm btn-warning text-justify', 'data-toggle'=>'popover', 'data-placement'=>'bottom', 'data-html'=>'true', 'data-trigger'=>'focus',
-       'title'=>'<b>Aide pour le streaming</b>', 'data-content'=>'Veuillez ouvrir le fichier *.m3u avec votre lecteur préféré. <br><br>En cas de problèmes veuillez installer <a href=\'http://www.videolan.org/vlc/\' target=\'_blank\'>VLC media player</a>.', 'escape' => false ))
-       .'</td>';
+       .'&nbsp;&nbsp;';
+
+       if ($OS == "Windows") {
+
+         echo $this->Html->link(__('<span class="glyphicon glyphicon-eye-open"></span>  Streaming'), ['action' => 'stream', $episode->id], array('class' =>'btn btn-warning text-justify', 'data-toggle'=>'popover', 'data-placement'=>'bottom', 'data-html'=>'true', 'data-trigger'=>'focus',
+         'title'=>'<b>Aide pour le streaming</b>', 'data-content'=> 'Veuillez ouvrir le fichier *.m3u avec votre lecteur préféré.
+         <br><br>En cas de problèmes veuillez installer <a href=\'http://www.videolan.org/vlc/\' target=\'_blank\'>VLC media player</a>.'
+         , 'escape' => false ));
+       } else {
+         echo $this->Html->link(__('<span class="glyphicon glyphicon-eye-open"></span>  Streaming'), ['action' => 'stream', $episode->id], array('class' =>'btn btn-warning text-justify', 'data-toggle'=>'popover', 'data-placement'=>'bottom', 'data-html'=>'true', 'data-trigger'=>'focus',
+         'title'=>'<b>Aide pour le streaming</b>', 'data-content'=>
+         '<p><b>ATTENTION : Changement de fonctionnement depuis la nouvelle version !</b></p>
+         Veuillez télécharger et installer l\'utilitaire suivant : <a href=\'../../Media_streamingVLC.exe\' target=\'_blank\'>VLCHandler</a>.
+         <br><br>En cas de problèmes veuillez installer <a href=\'http://www.videolan.org/vlc/\' target=\'_blank\'>VLC media player</a>.'
+         , 'escape' => false ));
+       }
+
+       echo '</td>';
 
 
       }

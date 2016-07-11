@@ -251,6 +251,7 @@ class SeriesController extends AppController
         $this->set('serie', $serie);
         $this->set('episodes', $episodes);
         $this->set('seasons', $seasons);
+        $this->set('OS', getOS());
 
 
         $this->set('_serialize', ['serie']);
@@ -593,15 +594,19 @@ class SeriesController extends AppController
         $serie->view += 1;
         $this->Series->save($serie);
 
-        $this->response->header([
-                  'Content-Type: Application/m3u',
-                  'Content-Disposition: inline'
-              ]);
-        $this->response->download($titre.'.m3u');
-        echo "#EXTM3U\n
-        #EXTINF:-1, $titre\n
-        $file\n";
-        $this->autoRender=false;
+        if (getOS() != "Windows") {
+          $this->response->header([
+                    'Content-Type: Application/m3u',
+                    'Content-Disposition: inline'
+                ]);
+          $this->response->download($titre.'.m3u');
+          echo "#EXTM3U\n
+          #EXTINF:-1, $titre\n
+          $file\n";
+          $this->autoRender=false;
+        } else {
+          $this->redirect("vlchandler:".$file);
+        }
 
     }
 

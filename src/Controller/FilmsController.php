@@ -289,7 +289,7 @@ $films = $this->Films->find('all',array(
         $this->set('size', $size);
         $this->set('actors', $actors);
         $this->set('reals', $real);
-
+        $this->set('OS', getOS());
         $this->set('_serialize', ['film']);
     }
 
@@ -340,15 +340,20 @@ $films = $this->Films->find('all',array(
         $film->view += 1;
         $this->Films->save($film);
 
-        $this->response->header([
-                  'Content-Type: Application/m3u',
-                  'Content-Disposition: inline'
-              ]);
-        $this->response->download($titre.'.m3u');
-        echo "#EXTM3U\n
-        #EXTINF:-1, $titre\n
-        $file\n";
-        $this->autoRender=false;
+        if (getOS() != "Windows") {
+          $this->response->header([
+                    'Content-Type: Application/m3u',
+                    'Content-Disposition: inline'
+                ]);
+          $this->response->download($titre.'.m3u');
+          echo "#EXTM3U\n
+          #EXTINF:-1, $titre\n
+          $file\n";
+          $this->autoRender=false;
+        } else {
+          $this->redirect("vlchandler:".$file);
+        }
+
 
     }
 

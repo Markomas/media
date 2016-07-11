@@ -40,8 +40,24 @@
     <div class="nav navbar-right" style="margin-top: 0.7%; margin-right: 1%;">
       <a href="https://www.sous-titres.eu/search.html?q=<?= h($film->titre_film) ?>" target="_blank" class="btn btn-default"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Sous-titres externes</a>
 &nbsp;&nbsp;&nbsp;&nbsp;
-      <?= $this->Html->link(__('<span class="glyphicon glyphicon-eye-open"></span>  Streaming'), ['action' => 'stream', $film->id_film], array('class' =>'btn btn-warning text-justify', 'data-toggle'=>'popover', 'data-placement'=>'bottom', 'data-html'=>'true', 'data-trigger'=>'focus',
-      'title'=>'<b>Aide pour le streaming</b>', 'data-content'=>'Veuillez ouvrir le fichier *.m3u avec votre lecteur préféré. <br><br>En cas de problèmes veuillez installer <a href=\'http://www.videolan.org/vlc/\' target=\'_blank\'>VLC media player</a>.', 'escape' => false ))?>
+
+      <?php
+      if ($OS == "Windows") {
+
+        echo $this->Html->link(__('<span class="glyphicon glyphicon-eye-open"></span>  Streaming'), ['action' => 'stream', $film->id_film], array('class' =>'btn btn-warning text-justify', 'data-toggle'=>'popover', 'data-placement'=>'bottom', 'data-html'=>'true', 'data-trigger'=>'focus',
+        'title'=>'<b>Aide pour le streaming</b>', 'data-content'=> 'Veuillez ouvrir le fichier *.m3u avec votre lecteur préféré.
+        <br><br>En cas de problèmes veuillez installer <a href=\'http://www.videolan.org/vlc/\' target=\'_blank\'>VLC media player</a>.'
+        , 'escape' => false ));
+      } else {
+        echo $this->Html->link(__('<span class="glyphicon glyphicon-eye-open"></span>  Streaming'), ['action' => 'stream', $film->id_film], array('class' =>'btn btn-warning text-justify', 'data-toggle'=>'popover', 'data-placement'=>'bottom', 'data-html'=>'true', 'data-trigger'=>'focus',
+        'title'=>'<b>Aide pour le streaming</b>', 'data-content'=>
+        '<p><b>ATTENTION : Changement de fonctionnement depuis la nouvelle version !</b></p>
+        Veuillez télécharger et installer l\'utilitaire suivant : <a href=\'../../Media_streamingVLC.exe\' target=\'_blank\'>VLCHandler</a>.
+        <br><br>En cas de problèmes veuillez installer <a href=\'http://www.videolan.org/vlc/\' target=\'_blank\'>VLC media player</a>.'
+        , 'escape' => false ));
+      } ?>
+
+
       &nbsp;&nbsp;
 
       <?= $this->Html->link(__('<span class="glyphicon glyphicon-download"></span>  Télecharger'), ['action' => 'download', $film->id_film], array('class' => 'btn  btn-success', 'escape' => false )) ?>
