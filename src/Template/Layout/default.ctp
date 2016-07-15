@@ -150,7 +150,7 @@
 <br>
     <div class="navbar navbar-inverse navbar-fixed-bottom" role="navigation" style="margin-top: 30px; border: 1px solid #e3e3e3; background-color: #f5f5f5;  min-height:0px; height:20px;">
           <div class="container">
-          <p class="text-muted pull-right">Media V2.3 - Fièrement codé par S'Tonfute 105-64Me213</p>
+          <p class="text-muted pull-right">Media V2.3.1 - Fièrement codé par S'Tonfute 105-64Me213</p>
           </div>
         </div>
 
