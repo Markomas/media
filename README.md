@@ -1,4 +1,4 @@
-# CakePHP Application Skeleton
+# Media 
 
 [![License](https://poser.pugx.org/cakephp/app/license.svg)](https://packagist.org/packages/cakephp/app)
 
@@ -9,6 +9,10 @@ Cette application développée sous CakePHP permet l'indexation des films, séri
 Elle permet le streaming et le téléchargement depuis l'interface web.
 
 ## Fonctionnalités :
+#### Nouveauté de la version 2.3.1 :
+- Prise en charge des liens vlchandler sous windows (streaming direct sans fichier m3u)
+
+_____________________________
 #### Nouveautés de la version 2.3 :
 - Passage à l'API TMDB V3
 - Regroupement par nom de série en partie Admin et sélection multiple possible.
@@ -22,6 +26,7 @@ _____________________________
 - Nécessaire d'être en version 2.1 minimum pour mettre à jour vers 2.3 ( sinon réinstallation complète ...)
 - Un simple [code]git pull[/code] pour récupérer les modifications
 - Rendez vous à l'url de votre installation de Media et suivez le guide !
+
 _____________________________
 
 ##### Notes pour une nouvelle installation :
@@ -31,6 +36,7 @@ _____________________________
 - Suivez la documentation ci-dessous 
 - Créez manuellement la base de donnée mysql qui va accueillir Media
 - Rendez vous à l'url de votre installation de Media et suivez le guide !
+
 _____________________________
 
 #### Nouveautées de la version 2.1 :
